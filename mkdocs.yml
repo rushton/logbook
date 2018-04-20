@@ -1,0 +1,5 @@
+site_name: My Docs
+docs_dir: .
+site_dir: /dev/null
+theme:
+  name: 'rtd-dropdown'

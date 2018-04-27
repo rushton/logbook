@@ -1,3 +1,4 @@
+#!/bin/bash
 # log-book function, creates a template for working through problems.
 # Requires a folder called logbook in the home directory
 # Usage: lb <problem summary>

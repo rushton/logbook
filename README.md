@@ -17,6 +17,12 @@ Open the latest log entry
 lb
 ```
 
+Change the editor to open logbooks with (default is `vi`)
+```
+export EDITOR=atom
+lb
+```
+
 # Markdown server
 Sometimes you want to share your logbook with others, the project comes with a server for sharing links to your log entries.
 

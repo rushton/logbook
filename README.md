@@ -3,6 +3,8 @@ A command-line utility for logging daily engineering activity.
 
 <a href="https://asciinema.org/a/09iijMGsLwNtPrhO69TMAB7RA" target="_blank"><img src="https://asciinema.org/a/09iijMGsLwNtPrhO69TMAB7RA.png" /></a>
 
+Thanks to James Routley for the inital idea, see his blog post [here](https://routley.io/tech/2017/11/23/logbook.html)
+
 # Installation
 ```
 cp lb /usr/local/bin/

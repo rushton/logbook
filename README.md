@@ -1,6 +1,8 @@
 # Logbook
 A command-line utility for logging daily engineering activity.
 
+[![asciicast](https://asciinema.org/a/09iijMGsLwNtPrhO69TMAB7RA.png)](https://asciinema.org/a/09iijMGsLwNtPrhO69TMAB7RA)
+
 # Installation
 ```
 cp lb /usr/local/bin/

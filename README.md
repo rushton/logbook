@@ -12,7 +12,7 @@ begin a new log entry
 lb "Update the API to validate incoming requests"
 ```
 
-Open the last latest log entry
+Open the latest log entry
 ```
 lb
 ```

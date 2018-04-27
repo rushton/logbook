@@ -1,7 +1,7 @@
 # Logbook
 A command-line utility for logging daily engineering activity.
 
-[![asciicast](https://asciinema.org/a/09iijMGsLwNtPrhO69TMAB7RA.png)](https://asciinema.org/a/09iijMGsLwNtPrhO69TMAB7RA)
+<a href="https://asciinema.org/a/09iijMGsLwNtPrhO69TMAB7RA" target="_blank"><img src="https://asciinema.org/a/09iijMGsLwNtPrhO69TMAB7RA.png" /></a>
 
 # Installation
 ```

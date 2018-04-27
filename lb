@@ -21,9 +21,8 @@ $(printf "=%.0s" {1..${#1}})
 Started: $(date '+%Y-%m-%d %H:%M:%S')\n
 ### 1. Consider the problem you’re attempting to solve\n
 ### 2. Describe your method for solving it\n
-### 3. Describe the process of carrying out the method\n
-### 4. Record what happened\n
-### 5. How could it be improved?\n
+### 3. Record what happened\n
+### 4. How could it be improved?\n
 Completed: <use: date '+%Y-%m-%d %H:%M:%S'>" >> ~/logbook/$now.md
 elif [[ $# -gt 1 ]]
 then

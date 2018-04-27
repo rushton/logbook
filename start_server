@@ -1,2 +1,7 @@
 #!/bin/bash
+function finish {
+    rm -r mkdocs.yml
+}
+trap finish EXIT
+bash mkdocs.yml.template.bash > mkdocs.yml
 mkdocs serve -f mkdocs.yml

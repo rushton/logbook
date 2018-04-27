@@ -23,6 +23,12 @@ export EDITOR=atom
 lb
 ```
 
+Change the default location where the logbook is stored
+```
+export LOGBOOK_DIR=/tmp/mylogbook/
+lb
+```
+
 # Markdown server
 Sometimes you want to share your logbook with others, the project comes with a server for sharing links to your log entries.
 

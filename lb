@@ -7,6 +7,15 @@ if [ -z "$EDITOR" ]
 then
     DEFAULT_EDITOR=vi
 fi
+
+if [ -z "$LOGBOOK_DIR" ]
+then
+    DEFAULT_LOGBOOK_DIR=$HOME/logbook
+fi
+
+# create directory if it doesn't exist
+mkdir -p $DEFAULT_LOGBOOK_DIR
+
 now=$(date '+%Y-%m-%d')
 # if no parameters provided and logbook entries exist, open the logbook
 # with the maximum date.
@@ -31,4 +40,4 @@ then
     return 1
 fi
 
-$DEFAULT_EDITOR ~/logbook/$now.md
+$DEFAULT_EDITOR $DEFAULT_LOGBOOK_DIR/$now.md

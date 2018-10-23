@@ -22,7 +22,7 @@ now=$(date '+%Y-%m-%d')
 if [[ $# -eq 0 && $(ls ~/logbook | grep "^[0-9].*md$" | wc -l) -gt 0 ]]
 then
     $DEFAULT_EDITOR ~/logbook/$(ls ~/logbook | grep "^[0-9].*md$" | sort | tail -n1)
-    return 0
+    exit 0
 elif [[ $# -eq 1 ]]
 then
     echo "\n$1
@@ -37,7 +37,7 @@ elif [[ $# -gt 1 ]]
 then
     echo "Error: too many parameters"
     echo "Usage: lb [<problem summary>]"
-    return 1
+    exit 1
 fi
 
 $DEFAULT_EDITOR $DEFAULT_LOGBOOK_DIR/$now.md

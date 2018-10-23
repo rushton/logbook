@@ -3,5 +3,5 @@ function finish {
     rm -r mkdocs.yml
 }
 trap finish EXIT
-bash mkdocs.yml.template.bash > mkdocs.yml
-mkdocs serve -f mkdocs.yml
+bash $(dirname "$0")/mkdocs.yml.template.bash > $(dirname "$0")/mkdocs.yml
+mkdocs serve -f $(dirname "$0")/mkdocs.yml

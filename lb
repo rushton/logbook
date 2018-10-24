@@ -21,7 +21,14 @@ now=$(date '+%Y-%m-%d')
 # with the maximum date.
 if [[ $# -eq 0 && $(ls ~/logbook | grep "^[0-9].*md$" | wc -l) -gt 0 ]]
 then
-    $DEFAULT_EDITOR ~/logbook/$(ls ~/logbook | grep "^[0-9].*md$" | sort | tail -n1)
+
+    if [[ "$DEFAULT_EDITOR" =~ ^(vi|nvim|vim)$ ]]
+    then
+        LATEST_UNFINISHED_ENTRY_LNO=$(nl -ba $DEFAULT_LOGBOOK_DIR/$now.md | grep -P "(Completed|\t=+)" | grep -B1 "<use" | head -n1 | awk '{print $1-1}')
+        $DEFAULT_EDITOR $DEFAULT_LOGBOOK_DIR/$(ls ~/logbook | grep "^[0-9].*md$" | sort | tail -n1) \+${LATEST_UNFINISHED_ENTRY_LNO:-0}
+    else
+        $DEFAULT_EDITOR $DEFAULT_LOGBOOK_DIR/$(ls ~/logbook | grep "^[0-9].*md$" | sort | tail -n1)
+    fi
     exit 0
 elif [[ $# -eq 1 ]]
 then

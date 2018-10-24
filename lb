@@ -17,9 +17,10 @@ fi
 mkdir -p $DEFAULT_LOGBOOK_DIR
 
 now=$(date '+%Y-%m-%d')
+
 # if no parameters provided and logbook entries exist, open the logbook
 # with the maximum date.
-if [[ $# -eq 0 && $(ls ~/logbook | grep "^[0-9].*md$" | wc -l) -gt 0 ]]
+if [[ $# -eq 0 && $(ls $DEFAULT_LOGBOOK_DIR | grep "^[0-9].*md$" | wc -l) -gt 0 ]]
 then
 
     if [[ "$DEFAULT_EDITOR" =~ ^(vi|nvim|vim)$ ]]
@@ -30,6 +31,10 @@ then
         $DEFAULT_EDITOR $DEFAULT_LOGBOOK_DIR/$(ls ~/logbook | grep "^[0-9].*md$" | sort | tail -n1)
     fi
     exit 0
+elif [[ $# -eq 1 && $1 -eq "list" ]]
+then
+    grep -B1 "^=\+" $DEFAULT_LOGBOOK_DIR/*.md | grep "md-" | grep -Po "/[0-9]{4}-[0-9]{2}-[0-9]{2}.*" | sed -e 's#\.md\-#|#' -e 's#^/##g' | awk -F'|' '{a[$1]=a[$1]"\n\t"$2}END{for(k in a){print k, a[k]}}'
+    exit 0 
 elif [[ $# -eq 1 ]]
 then
     printf "\n$1

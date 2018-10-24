@@ -13,24 +13,38 @@ cp lb /usr/local/bin/
 # Usage
 begin a new log entry
 ```
-lb "Update the API to validate incoming requests"
+#> lb "Update the API to validate incoming requests"
 ```
 
 Open the latest log entry
 ```
-lb
+#> lb
+```
+
+list previous logbook headers
+```
+#> lb list
+2018-10-22 
+        investigate bug in web service
+2018-10-23 
+        What is Nomad?
+        Determine best technology for large scale Key-Value stores
+        what is JWT?
+2018-10-24 
+        Figure out how to get credentials in AWS
+        Find the root cause of the catastrophic failure last week
 ```
 
 Change the editor to open logbooks with (default is `vi`)
 ```
-export EDITOR=atom
-lb
+#> export EDITOR=atom
+#> lb
 ```
 
 Change the default location where the logbook is stored
 ```
-export LOGBOOK_DIR=/tmp/mylogbook/
-lb
+#> export LOGBOOK_DIR=/tmp/mylogbook/
+#> lb
 ```
 
 # Markdown server

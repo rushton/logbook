@@ -40,4 +40,13 @@ then
     exit 1
 fi
 
-$DEFAULT_EDITOR $DEFAULT_LOGBOOK_DIR/$now.md
+# if using some type of vim, go to the line where the current logbook begins
+# via the '+' parameter
+if [[ "$DEFAULT_EDITOR" =~ ^(vi|nvim|vim)$ ]]
+then
+    # find the line number of the 
+    LEN_LOGBOOK=$(nl -b a $DEFAULT_LOGBOOK_DIR/$now.md | grep "$1$" | awk '{print $1}')
+    $DEFAULT_EDITOR $DEFAULT_LOGBOOK_DIR/$now.md \+$(echo $LEN_LOGBOOK)
+else
+    $DEFAULT_EDITOR $DEFAULT_LOGBOOK_DIR/$now.md
+fi

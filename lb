@@ -10,31 +10,32 @@ fi
 
 if [ -z "$LOGBOOK_DIR" ]
 then
-    DEFAULT_LOGBOOK_DIR=$HOME/logbook
+    LOGBOOK_DIR=$HOME/logbook
 fi
 
 # create directory if it doesn't exist
-mkdir -p $DEFAULT_LOGBOOK_DIR
+mkdir -p $LOGBOOK_DIR
 
 now=$(date '+%Y-%m-%d')
 
 # if no parameters provided and logbook entries exist, open the logbook
 # with the maximum date.
-if [[ $# -eq 0 && $(ls $DEFAULT_LOGBOOK_DIR | grep "^[0-9].*md$" | wc -l) -gt 0 ]]
+if [[ $# -eq 0 && $(ls $LOGBOOK_DIR | grep "^[0-9].*md$" | wc -l) -gt 0 ]]
 then
 
+    LATEST_ENTRY=$LOGBOOK_DIR/$(ls $LOGBOOK_DIR | grep "^[0-9].*md$" | sort | tail -n1)
     if [[ "$DEFAULT_EDITOR" =~ ^(vi|nvim|vim)$ ]]
     then
-        LATEST_UNFINISHED_ENTRY_LNO=$(nl -ba $DEFAULT_LOGBOOK_DIR/$now.md | grep -P "(Completed|\t=+)" | grep -B1 "<use" | head -n1 | awk '{print $1-1}')
-        $DEFAULT_EDITOR $DEFAULT_LOGBOOK_DIR/$(ls ~/logbook | grep "^[0-9].*md$" | sort | tail -n1) \+${LATEST_UNFINISHED_ENTRY_LNO:-0}
+        LATEST_UNFINISHED_ENTRY_LNO=$(nl -ba $LATEST_ENTRY | grep -P "(Completed|\t=+)" | grep -B1 "<use" | head -n1 | awk '{print $1-1}')
+        $DEFAULT_EDITOR $LATEST_ENTRY \+${LATEST_UNFINISHED_ENTRY_LNO:-0}
     else
-        $DEFAULT_EDITOR $DEFAULT_LOGBOOK_DIR/$(ls ~/logbook | grep "^[0-9].*md$" | sort | tail -n1)
+        $DEFAULT_EDITOR $LATEST_ENTRY
     fi
     exit 0
 elif [[ $# -eq 1 && $1 -eq "list" ]]
 then
-    grep -B1 "^=\+" $DEFAULT_LOGBOOK_DIR/*.md | grep "md-" | grep -Po "/[0-9]{4}-[0-9]{2}-[0-9]{2}.*" | sed -e 's#\.md\-#|#' -e 's#^/##g' | awk -F'|' '{a[$1]=a[$1]"\n\t"$2}END{for(k in a){print k, a[k]}}'
-    exit 0 
+    grep -B1 "^=\+" $LOGBOOK_DIR/*.md | grep "md-" | grep -Po "/[0-9]{4}-[0-9]{2}-[0-9]{2}.*" | sed -e 's#\.md\-#|#' -e 's#^/##g' | awk -F'|' '{a[$1]=a[$1]"\n\t"$2}END{for(k in a){print k, a[k]}}'
+    exit 0
 elif [[ $# -eq 1 ]]
 then
     printf "\n$1
@@ -44,11 +45,14 @@ Started: $(date '+%Y-%m-%d %H:%M:%S')\n
 ### 2. Describe your method for solving it\n
 ### 3. Record what happened\n
 ### 4. How could it be improved?\n
-Completed: <use: date '+%%Y-%%m-%%d %%H:%%M:%%S'>" >> ~/logbook/$now.md
+Completed: <use: date '+%%Y-%%m-%%d %%H:%%M:%%S'>" >> $LOGBOOK_DIR/$now.md
 elif [[ $# -gt 1 ]]
 then
     echo "Error: too many parameters"
     echo "Usage: lb [<problem summary>]"
+    exit 1
+else
+    echo "No entries found in $LOGBOOK_DIR. Create and entry via: lb <title>"
     exit 1
 fi
 
@@ -56,9 +60,9 @@ fi
 # via the '+' parameter
 if [[ "$DEFAULT_EDITOR" =~ ^(vi|nvim|vim)$ ]]
 then
-    # find the line number of the 
-    LEN_LOGBOOK=$(nl -b a $DEFAULT_LOGBOOK_DIR/$now.md | grep "$1$" | awk '{print $1}')
-    $DEFAULT_EDITOR $DEFAULT_LOGBOOK_DIR/$now.md \+$(echo $LEN_LOGBOOK)
+    # find the line number of the
+    LEN_LOGBOOK=$(nl -b a $LOGBOOK_DIR/$now.md | grep "$1$" | awk '{print $1}')
+    $DEFAULT_EDITOR $LOGBOOK_DIR/$now.md \+$(echo $LEN_LOGBOOK)
 else
-    $DEFAULT_EDITOR $DEFAULT_LOGBOOK_DIR/$now.md
+    $DEFAULT_EDITOR $LOGBOOK_DIR/$now.md
 fi

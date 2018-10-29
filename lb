@@ -36,7 +36,8 @@ if [[ $# -eq 0 && $(ls $LOGBOOK_DIR | grep "^[0-9].*md$" | wc -l) -gt 0 ]]
 then
 
     LATEST_ENTRY=$LOGBOOK_DIR/$(ls $LOGBOOK_DIR | grep "^[0-9].*md$" | sort | tail -n1)
-    LATEST_UNFINISHED_ENTRY_LNO=$(nl -ba $LATEST_ENTRY | grep -E "(Completed|\t=+)" | grep -B1 "<use" | head -n1 | awk '{print $1-1}')
+    LATEST_UNFINISHED_ENTRY_LNO=$(nl -ba $LATEST_ENTRY | grep -E "(Completed|\s=+)" | grep -B1 "<use" | head -n1 | awk '{print $1-1}')
+    echo $LATEST_UNFINISHED_ENTRY_LNO
     open_file $LATEST_ENTRY $LATEST_UNFINISHED_ENTRY_LNO
     exit 0
 elif [[ $# -eq 1 && "$1" == "list" ]]

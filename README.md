@@ -25,16 +25,21 @@ list previous logbook headers
 ```
 #> lb list
 2018-10-22 
-        investigate bug in web service
+        1.1 investigate bug in web service
 2018-10-23 
-        What is Nomad?
-        Determine best technology for large scale Key-Value stores
-        what is JWT?
+        2.1 What is Nomad?
+        2.2 Determine best technology for large scale Key-Value stores
+        2.3 what is JWT?
 2018-10-24 
-        Figure out how to get credentials in AWS
-        Find the root cause of the catastrophic failure last week
+        2.4 Figure out how to get credentials in AWS
+        2.5 Find the root cause of the catastrophic failure last week
 ```
 
+goto a given \<section\>.\<entry\> listed in `lb list`
+```
+lb goto 2.4
+```
+       
 Change the editor to open logbooks with (default is `vi`)
 ```
 #> export EDITOR=atom

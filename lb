@@ -41,7 +41,7 @@ then
     exit 0
 elif [[ $# -eq 1 && "$1" == "list" ]]
 then
-    grep -B1 "^=\+" $LOGBOOK_DIR/*.md | grep "md-" | grep -Eo "/[0-9]{4}-[0-9]{2}-[0-9]{2}.*" | sed -e 's#\.md\-#|#' -e 's#^/##g' | awk -F'|' '{a[$1]=a[$1]"\n\t"$2}END{for(k in a){print k, a[k]}}'
+    grep -B1 "^=\+" $LOGBOOK_DIR/*.md | grep "md-" | grep -Eo "/[0-9]{4}-[0-9]{2}-[0-9]{2}.*" | sed -e 's#\.md\-#|#' -e 's#^/##g' | awk -F'|' '$1!=prev{print $1;section+=1;entry=0;}{entry+=1; prev=$1; print "\t"section"."entry" "$2;}'
     exit 0
 
 elif [[ $# -gt 1 && $1 == "search" ]]

@@ -9,15 +9,21 @@ function open_file {
 
     # if using some type of vim, go to the line where the current logbook begins
     # via the '+' parameter
-    if [[ "${EDITOR:-vi}" =~ ^(vi|nvim|vim)$ ]]
-    then
-        ${EDITOR:-vi} $FILENAME \+$LINE_JUMP
-    elif [[ "${EDITOR:-vi}" =~ ^(subl|atom)$ ]]
-    then
-        ${EDITOR:-vi} $FILENAME:$LINE_JUMP
-    else
-        ${EDITOR:-vi} $FILENAME
-    fi
+    case ${EDITOR:-vi} in
+        vi|nvim|vim)
+            ${EDITOR:-vi} $FILENAME \+$LINE_JUMP
+            ;;
+        subl|atom)
+            ${EDITOR:-vi} $FILENAME:$LINE_JUMP
+            ;;
+        *)
+            ${EDITOR:-vi} $FILENAME
+            ;;
+    esac
+}
+
+function list {
+    grep -B1 "^=\+" $LOGBOOK_DIR/*.md | grep "md-" | grep -Eo "/[0-9]{4}-[0-9]{2}-[0-9]{2}.*" | sed -e 's#\.md\-#|#' -e 's#^/##g' | awk -F'|' '$1!=prev{print $1;section+=1;entry=0;}{entry+=1; prev=$1; print "\t"section"."entry" "$2;}'
 }
 
 if [ -z "$LOGBOOK_DIR" ]
@@ -41,9 +47,17 @@ then
     exit 0
 elif [[ $# -eq 1 && "$1" == "list" ]]
 then
-    grep -B1 "^=\+" $LOGBOOK_DIR/*.md | grep "md-" | grep -Eo "/[0-9]{4}-[0-9]{2}-[0-9]{2}.*" | sed -e 's#\.md\-#|#' -e 's#^/##g' | awk -F'|' '$1!=prev{print $1;section+=1;entry=0;}{entry+=1; prev=$1; print "\t"section"."entry" "$2;}'
+    list
     exit 0
 
+elif [[ $# -gt 1 && $1 == "goto" ]]
+then
+    # escape any dots to prepare for grep
+    SECTION_ENTRY=$(echo $2 | sed 's/\./\\./')
+    ENTRY_TITLE=$(list | grep "^\s$SECTION_ENTRY" | sed -e 's#[[:space:]][0-9]\.[0-9] ##')
+    LOCATION=$(fgrep -n "$ENTRY_TITLE" $LOGBOOK_DIR/*.md | awk -F':' '{print $1, $2}')
+    open_file $(echo $LOCATION | awk '{print $1}') $(echo $LOCATION | awk '{print $2}')
+    exit 0
 elif [[ $# -gt 1 && $1 == "search" ]]
 then
     grep -n ${@:2} $LOGBOOK_DIR/*.md

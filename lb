@@ -11,13 +11,13 @@ function open_file {
     # via the '+' parameter
     case ${EDITOR:-vi} in
         vi|nvim|vim) # vim and variants
-            ${EDITOR:-vi} $FILENAME \+$LINE_JUMP
+            $EDITOR $FILENAME \+$LINE_JUMP
             ;;
         subl|atom) # Sublime Text and Atom
-            ${EDITOR:-vi} $FILENAME:$LINE_JUMP
+            $EDITOR $FILENAME:$LINE_JUMP
             ;;
         idea) # IntelliJ IDE
-            ${EDITOR:-vi} $FILENAME --line $LINE_JUMP
+            $EDITOR --line $LINE_JUMP $FILENAME 
             ;;
         *)
             ${EDITOR:-vi} $FILENAME

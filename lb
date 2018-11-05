@@ -10,11 +10,14 @@ function open_file {
     # if using some type of vim, go to the line where the current logbook begins
     # via the '+' parameter
     case ${EDITOR:-vi} in
-        vi|nvim|vim)
+        vi|nvim|vim) # vim and variants
             ${EDITOR:-vi} $FILENAME \+$LINE_JUMP
             ;;
-        subl|atom)
+        subl|atom) # Sublime Text and Atom
             ${EDITOR:-vi} $FILENAME:$LINE_JUMP
+            ;;
+        idea) # IntelliJ IDE
+            ${EDITOR:-vi} $FILENAME --line $LINE_JUMP
             ;;
         *)
             ${EDITOR:-vi} $FILENAME
@@ -24,6 +27,14 @@ function open_file {
 
 function list {
     grep -B1 "^=\+" $LOGBOOK_DIR/*.md | grep "md-" | grep -Eo "/[0-9]{4}-[0-9]{2}-[0-9]{2}.*" | sed -e 's#\.md\-#|#' -e 's#^/##g' | awk -F'|' '$1!=prev{print $1;section+=1;entry=0;}{entry+=1; prev=$1; print "\t"section"."entry" "$2;}'
+}
+
+function entry_number_to_location {
+    entry_no=$1
+    GIT_BASE_DIR=$(git --git-dir=$LOGBOOK_DIR/.git --work-tree=$LOGBOOK_DIR config --get remote.origin.url | awk -F'[@:/]+' 'BEGIN{OFS="/"}/^ssh/{print $3, $5, $6}/^http/{print $2}' | sed 's#\.git$#/blob/master/#')
+    SECTION_ENTRY=$(echo $entry_no | sed 's/\./\\./')
+    ENTRY_TITLE=$(list | grep "^\s$SECTION_ENTRY" | sed -e 's#[[:space:]][0-9]\.[0-9] ##')
+    fgrep -n "$ENTRY_TITLE" $LOGBOOK_DIR/*.md | awk -F':' '{print $1, $2}'
 }
 
 if [ -z "$LOGBOOK_DIR" ]
@@ -50,12 +61,25 @@ then
     list
     exit 0
 
+elif [[ $# -gt 1 && $1 == "link" ]]
+then
+    if [ ! -d "${LOGBOOK_DIR}/.git" ]
+    then
+        echo "Logbook dir ($LOGBOOK_DIR) is not a git respository."
+        exit 1
+    fi
+
+    GIT_BASE_DIR=$(git --git-dir=$LOGBOOK_DIR/.git --work-tree=$LOGBOOK_DIR config --get remote.origin.url | awk -F'[@:/]+' 'BEGIN{OFS="/"}/^ssh/{print $3, $5, $6}/^http/{print $2}' | sed 's#\.git$#/blob/master/#')
+    for entry_no in "${@:2}"
+    do
+        LOCATION=$(entry_number_to_location $entry_no)
+        echo "http://"${GIT_BASE_DIR}$(echo $LOCATION | awk -F'[/ ]' '{print $(NF-1)}')"#L"$(echo $LOCATION | awk '{print $2}')
+    done
+    exit 0
 elif [[ $# -gt 1 && $1 == "goto" ]]
 then
     # escape any dots to prepare for grep
-    SECTION_ENTRY=$(echo $2 | sed 's/\./\\./')
-    ENTRY_TITLE=$(list | grep "^\s$SECTION_ENTRY" | sed -e 's#[[:space:]][0-9]\.[0-9] ##')
-    LOCATION=$(fgrep -n "$ENTRY_TITLE" $LOGBOOK_DIR/*.md | awk -F':' '{print $1, $2}')
+    LOCATION=$(entry_number_to_location $2)
     open_file $(echo $LOCATION | awk '{print $1}') $(echo $LOCATION | awk '{print $2}')
     exit 0
 elif [[ $# -gt 1 && $1 == "search" ]]

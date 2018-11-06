@@ -17,7 +17,7 @@ function open_file {
             $EDITOR $FILENAME:$LINE_JUMP
             ;;
         idea) # IntelliJ IDE
-            $EDITOR --line $LINE_JUMP $FILENAME 
+            $EDITOR --line $LINE_JUMP $FILENAME
             ;;
         *)
             ${EDITOR:-vi} $FILENAME
@@ -33,7 +33,7 @@ function entry_number_to_location {
     entry_no=$1
     GIT_BASE_DIR=$(git --git-dir=$LOGBOOK_DIR/.git --work-tree=$LOGBOOK_DIR config --get remote.origin.url | awk -F'[@:/]+' 'BEGIN{OFS="/"}/^ssh/{print $3, $5, $6}/^http/{print $2}' | sed 's#\.git$#/blob/master/#')
     SECTION_ENTRY=$(echo $entry_no | sed 's/\./\\./')
-    ENTRY_TITLE=$(list | grep "^\s$SECTION_ENTRY" | sed -e 's#[[:space:]][0-9]\.[0-9] ##')
+    ENTRY_TITLE=$(list | grep "^\s$SECTION_ENTRY" | sed -e 's#[[:space:]][0-9]*\.[0-9]* ##')
     fgrep -n "$ENTRY_TITLE" $LOGBOOK_DIR/*.md | awk -F':' '{print $1, $2}'
 }
 
@@ -96,6 +96,7 @@ then
     GIT_BASE_DIR=$(git --git-dir=$LOGBOOK_DIR/.git --work-tree=$LOGBOOK_DIR config --get remote.origin.url | awk -F'[@:/]+' 'BEGIN{OFS="/"}/^ssh/{print $3, $5, $6}/^http/{print $2}' | sed 's#\.git$#/blob/master/#')
     for entry_no in "${@:2}"
     do
+
         LOCATION=$(entry_number_to_location $entry_no)
         echo "http://"${GIT_BASE_DIR}$(echo $LOCATION | awk -F'[/ ]' '{print $(NF-1)}')"#L"$(echo $LOCATION | awk '{print $2}')
     done

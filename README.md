@@ -11,6 +11,41 @@ cp lb /usr/local/bin/
 ```
 
 # Usage
+```
+lb: a logbook utility
+Usage:
+    lb [<title> | <command>]
+
+Commands:
+    lb
+        opens the latest logbook entry
+
+    lb <title>
+        creates a new entry in the logbook
+
+    lb list
+        lists the current logbook etries you've created, also annotates with [entry-number]s
+
+    lb goto [entry-number]
+        jumps to the specified logbook entry
+
+    lb link [entry-number ...]
+        provides links to the github/gitlab web pages where the entry can be found
+
+    lb search [grep-options] PATTERN
+        runs grep against your logbook entries
+
+ENVIRONMENT VARIABLES:
+
+    LOGBOOK_DIR
+        specifies the directory in which to store the logbook
+
+    EDITOR
+        used by lb to determine which program to open your logbook with
+        
+```
+
+# Examples
 begin a new log entry
 ```
 #> lb "Update the API to validate incoming requests"
@@ -31,8 +66,15 @@ list previous logbook headers
         2.2 Determine best technology for large scale Key-Value stores
         2.3 what is JWT?
 2018-10-24 
-        2.4 Figure out how to get credentials in AWS
-        2.5 Find the root cause of the catastrophic failure last week
+        3.1 Figure out how to get credentials in AWS
+        3.2 Find the root cause of the catastrophic failure last week
+```
+
+generate links
+```
+#> lb link 2.3 3.2
+http://github.com/rushton/logbook/blob/master/2018-10-23.md#L297
+http://github.com/rushton/logbook/blob/master/2018-10-24.md#L64
 ```
 
 goto a given \<section\>.\<entry\> listed in `lb list`

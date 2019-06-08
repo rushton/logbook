@@ -31,10 +31,9 @@ function list {
 
 function entry_number_to_location {
     entry_no=$1
-    GIT_BASE_DIR=$(git --git-dir=$LOGBOOK_DIR/.git --work-tree=$LOGBOOK_DIR config --get remote.origin.url | awk -F'[@:/]+' 'BEGIN{OFS="/"}/^ssh/{print $3, $5, $6}/^http/{print $2}' | sed 's#\.git$#/blob/master/#')
     SECTION_ENTRY=$(echo $entry_no | sed 's/\./\\./')
     ENTRY_TITLE=$(list | grep "^\s$SECTION_ENTRY" | sed -e 's#[[:space:]][0-9]*\.[0-9]* ##')
-    fgrep -n "$ENTRY_TITLE" $LOGBOOK_DIR/*.md | awk -F':' '{print $1, $2}'
+    fgrep -n "$ENTRY_TITLE" $LOGBOOK_DIR/*.md | grep -v "^README.md" | awk -F':' '{print $1, $2}'
 }
 
 if [ -z "$LOGBOOK_DIR" ]
@@ -92,8 +91,16 @@ then
         echo "Logbook dir ($LOGBOOK_DIR) is not a git respository."
         exit 1
     fi
-
-    GIT_BASE_DIR=$(git --git-dir=$LOGBOOK_DIR/.git --work-tree=$LOGBOOK_DIR config --get remote.origin.url | awk -F'[@:/]+' 'BEGIN{OFS="/"}/^ssh/{print $3, $5, $6}/^http/{print $2}' | sed 's#\.git$#/blob/master/#')
+    GIT_BASE_DIR=$(git --git-dir=$LOGBOOK_DIR/.git --work-tree=$LOGBOOK_DIR config --get remote.origin.url | awk -F'[@:/]+' '
+    BEGIN{
+        OFS="/"
+    }/^ssh/{
+        print $3, $5, $6
+    }/^http/{
+        print $2
+    }/^git/{
+        print $2, $3, $4
+    }' | sed -e 's#\.git$##' -e 's#$#/blob/master/#')
     for entry_no in "${@:2}"
     do
 

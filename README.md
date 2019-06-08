@@ -1,7 +1,7 @@
 # Logbook
 A command-line utility for logging daily engineering activity.
 
-<a href="https://asciinema.org/a/09iijMGsLwNtPrhO69TMAB7RA" target="_blank"><img src="https://asciinema.org/a/09iijMGsLwNtPrhO69TMAB7RA.png" /></a>
+<a href="https://asciinema.org/a/BaSr8PoS2huWpC3Xs25wPsNdW?autoplay=1"><img src="https://asciinema.org/a/BaSr8PoS2huWpC3Xs25wPsNdW.svg" width="500"/></a>
 
 Thanks to James Routley for the inital idea, see his blog post [here](https://routley.io/tech/2017/11/23/logbook.html)
 
@@ -42,7 +42,7 @@ ENVIRONMENT VARIABLES:
 
     EDITOR
         used by lb to determine which program to open your logbook with
-        
+
 ```
 
 # Examples
@@ -59,13 +59,13 @@ Open the latest log entry
 list previous logbook headers
 ```
 #> lb list
-2018-10-22 
+2018-10-22
         1.1 investigate bug in web service
-2018-10-23 
+2018-10-23
         2.1 What is Nomad?
         2.2 Determine best technology for large scale Key-Value stores
         2.3 what is JWT?
-2018-10-24 
+2018-10-24
         3.1 Figure out how to get credentials in AWS
         3.2 Find the root cause of the catastrophic failure last week
 ```
@@ -81,7 +81,7 @@ goto a given \<section\>.\<entry\> listed in `lb list`
 ```
 lb goto 2.4
 ```
-       
+
 Change the editor to open logbooks with (default is `vi`)
 ```
 #> export EDITOR=atom

@@ -1,0 +1,6 @@
+
+site_name: My Docs
+docs_dir: /docs/mydocs/
+theme:
+  name: 'material'
+

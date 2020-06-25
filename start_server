@@ -1,7 +1,1 @@
-#!/bin/bash
-function finish {
-    rm -r mkdocs.yml
-}
-trap finish EXIT
-bash $(dirname "$0")/mkdocs.yml.template.bash > $(dirname "$0")/mkdocs.yml
-mkdocs serve -f $(dirname "$0")/mkdocs.yml
+docker run --rm -it -p 8000:8000 -v ${PWD}/mkdocs.yml:/docs/mkdocs.yml -v ${PWD}:/docs/mydocs/ squidfunk/mkdocs-material

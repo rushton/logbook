@@ -94,13 +94,9 @@ Change the default location where the logbook is stored
 #> lb
 ```
 
-# Markdown server
+# Mkdocs Server
 Sometimes you want to share your logbook with others, the project comes with a server for sharing links to your log entries.
 
-## Installation
-```
-pip install -r requirements.txt
-```
 ## Usage
 ```
 ./start_server
